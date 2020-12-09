@@ -18,8 +18,37 @@ static uint8_t led_3_counter = 0;
 // handeling the routine outside of the isr
 uint8_t flash = 0;
 
+elapsedMicros current;
+
 void isrService() {
   flash=1;
+}
+
+void turnLedsOn(){
+  if (led_1_counter < led_1_divider){
+    led_1_counter++;
+    if (led_1_counter == 1){
+      digitalWrite(led1, HIGH);
+    }
+  }
+  if (led_2_counter < led_2_divider){
+    led_2_counter++;
+    if (led_2_counter == 1){
+      digitalWrite(led2, HIGH);
+    }
+  }
+  if (led_3_counter < led_3_divider){
+    led_3_counter++;
+    if (led_3_counter == 1){
+      digitalWrite(led3, HIGH);
+    }
+  }
+}
+
+void turnLedsOff() {
+  digitalWrite(led1, LOW);
+  digitalWrite(led2, LOW);
+  digitalWrite(led3, LOW);
 }
 
 void setup() {  
@@ -43,29 +72,12 @@ void setup() {
 
 void loop() {
   if (flash == 1){
-    if (led_1_counter < led_1_divider){
-      led_1_counter++;
-      if (led_1_counter == 1){
-        digitalWrite(led1, HIGH);
-      }
-    }
-    if (led_2_counter < led_2_divider){
-      led_2_counter++;
-      if (led_2_counter == 1){
-        digitalWrite(led2, HIGH);
-      }
-    }
-    if (led_3_counter < led_3_divider){
-      led_3_counter++;
-      if (led_3_counter == 1){
-        digitalWrite(led3, HIGH);
-      }
-    }
-    delayMicroseconds(100);
-    digitalWrite(led1, LOW);
-    digitalWrite(led2, LOW);
-    digitalWrite(led3, LOW);
+    current = 0;
+    turnLedsOn();
     flash = 0;
+  }
+  if (current >= 100){
+    turnLedsOff();
   }
   if (led_1_counter == led_1_divider){
       led_1_counter = 0;
