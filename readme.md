@@ -182,7 +182,7 @@ int rps():
 	- should cause unsynced LEDs
 	
 - loop() called ca. at 117 kHz aka 117,000 times/second?
-	- COuld be more or less, depends on board, code in loop, etc.
+	- Could be more or less, depends on board, code in loop, etc.
 	- Not a good value to build anything on. Use rather micro or milliseconds
 	
 - write time-based version of code
