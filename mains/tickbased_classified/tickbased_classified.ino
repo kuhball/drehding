@@ -10,9 +10,12 @@
  */
 
 #include "Arduino.h"
+
 #include "Motor.h"
 #include "Hall.h"
 #include "Led.h"
+
+#include "SequenceBasicFlash.h"
 
 
 // pin setup (all digital)
@@ -31,6 +34,11 @@
 Led led1(PIN_LED1, true);
 Led led2(PIN_LED2, true);
 Led led3(PIN_LED3, true);
+
+SequenceBasicFlash seq1(led1, 0);
+SequenceBasicFlash seq2(led2, 0);
+SequenceBasicFlash seq3(led3, 0);
+
 Hall hall(PIN_HALL, HALL_TICKS_PER_TURN);
 Motor motor(PIN_MOTOR, MOTOR_PWM_HZ);
 
@@ -42,18 +50,10 @@ void isr() {
 }
 
 /**
- * Turns all LEDs off that have been on for LED_INTERVAL_ON microseconds or longer.
- */
-void leds_turn_off() {
-  led1.turn_off();
-  led2.turn_off();
-  led3.turn_off();
-}
-
-/**
  * Setup the routine.
  */
 void setup() {
+  motor.start();
   hall.set_interrupt_handler(isr);
   sei();  // start interrupts
 }
@@ -62,12 +62,14 @@ void setup() {
  * Loop execute indefinitiely.
  */
 void loop() {
-  leds_turn_off();
+  seq1.loop_tick();
+  seq2.loop_tick();
+  seq3.loop_tick();
 
   if (hall.ticked_since_last_read) {  // only act if there has been a change since last action
     uint8_t tick_pos = hall.get_tick_pos();
-    led1.turn_on(tick_pos);
-    led2.turn_on(tick_pos);
-    led3.turn_on(tick_pos);
+    seq1.hall_tick(tick_pos);
+    seq2.hall_tick(tick_pos);
+    seq3.hall_tick(tick_pos);
   }
 }

@@ -14,7 +14,7 @@
 #define PIN_HALL 14  // do not use the pin with the board LED attached (usually 13)
 #define PIN_LED1 4
 #define PIN_LED2 5
-#define PIN_LED3 6
+#define PIN_LED3 6 
 
 // base configuration
 #define HALL_PULSE_PER_TURN 18  // how often the hall-sensor sends a pulse per turn; a hardware constant; see hall-sensor specification or tests/hallsensorpulses
@@ -32,8 +32,8 @@ static const uint8_t led_3_pos = 0;
 static const uint8_t led_3_cooldown = 255;
 
 static long led_1_move_last = 0;
-static long led_1_move_interval = 1000000;
-static const long led_1_move_interval_change = 10000;
+static long led_1_move_interval = 100000;
+static const long led_1_move_interval_change = 1000;
 
 // motor configuration
 static const uint8_t motor_pulse_length = 40;  // which fraction of the motor's PWM signal to send HIGH; [0,255]; determines motor turning speed

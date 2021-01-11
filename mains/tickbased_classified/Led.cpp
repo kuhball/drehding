@@ -15,10 +15,12 @@ Led::Led(uint8_t pin, bool inverse)
 
 }
 
-void Led::turn_on(uint8_t hall_tick) {
-    if (hall_tick == flash_tick_pos) {  // if in right position
+void Led::turn_on_cond(uint8_t hall_tick_pos) {
+    if (!condition_mode) return;
+    
+    if (hall_tick_pos == flash_tick_pos) {  // if in right position
         if (_cooldown_counter >= n_ticks_cooldown) {  // if cooldown passed
-            digitalWrite(_pin, _on_val);  // switch LED on
+            _turn_on();
             _cooldown_counter = 0;  // reset cooldown
             _last_switched_on = micros();  // set timestamp
         } else {  // skip one turning of the motor
@@ -27,6 +29,26 @@ void Led::turn_on(uint8_t hall_tick) {
     }
 }
 
+void Led::turn_off_cond() {
+    if (!condition_mode) return;
+
+    if (micros() - _last_switched_on >= on_interval) _turn_off();
+}
+
+void Led::turn_on() {
+    condition_mode = false;
+    _turn_on();
+}
+
 void Led::turn_off() {
-    if (micros() - _last_switched_on >= on_interval) digitalWrite(_pin, _off_val);
+    condition_mode = false;
+    _turn_off();
+}
+
+void Led::_turn_on() {
+    digitalWrite(_pin, _on_val);
+}
+
+void Led::_turn_off() {
+    digitalWrite(_pin, _off_val);
 }

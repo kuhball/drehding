@@ -24,12 +24,28 @@ class Led {
     Led(uint8_t pin, bool inverse = false);
 
     /**
-     * Turn the LED on, if conditions are met.
+     * Turn LED on, if conditions are met.
+     * Does nothing if condition_mode is diabled.
+     * 
+     * @param hall_tick_pos the current position tick of the hall sensor
      */
-    void turn_on(uint8_t hall_tick);
+    void turn_on_cond(uint8_t hall_tick_pos);
 
     /**
-     * Turn the LED off, if conditions are met.
+     * Turn LED off, if conditions are met.
+     * Does nothing if condition_mode is diabled.
+     */
+    void turn_off_cond();
+
+    /**
+     * Turn LED on (and keep on).
+     * Disables condition_mode.
+     */
+    void turn_on();
+
+    /**
+     * Turn LED off (and keep off).
+     * Disables condition_mode.
      */
     void turn_off();
 
@@ -39,8 +55,13 @@ class Led {
     uint8_t n_ticks_cooldown = 0;
     // time (in micros) the LED should stay on; choose lowest value that still produces sufficient illumination; see tests/determineledminblinktime
     uint64_t on_interval = 300;
+    // set  condition LED turn on/off
+    bool condition_mode = true;
 
   private:
+    void _turn_on();
+    void _turn_off();
+
     uint8_t _pin;
     uint8_t _on_val;
     uint8_t _off_val;
