@@ -2,10 +2,11 @@
   SequenceBasicFlash.h - A flashing sequence.
   Tickbased version.
 */
-#ifndef Sequence_h
-#define Sequence_h
+#ifndef SequenceBasicFlash_h
+#define SequenceBasicFlash_h
 
 #include "Arduino.h"
+#include "Sequence.h"
 #include "Led.h"
 
 /**
@@ -13,11 +14,11 @@
  * 
  * Flashed ones per rotation at a fixed position.
  */
-class SequenceBasicFlash {
+class SequenceBasicFlash: protected Sequence {
   public:
     /**
      * @param led the pin the motor is connected to, can be digital or analogue pin; try not to use pin 5 and 6, because of interactions with the millis() and delay() functions
-     * @param flash_tick_pos // frequency in Hz of the PWM signal driving the motor; a hardware constant; see motor specification
+     * @param flash_tick_pos // at which hall tick position the LEd to flash
      */
     SequenceBasicFlash(Led &led, uint8_t flash_tick_pos);
 
@@ -30,9 +31,6 @@ class SequenceBasicFlash {
      * Call each time the hall tick changed.
      */
     void hall_tick(uint8_t hall_tick_pos);
-
-  private:
-    Led &_led;
 };
 
 #endif

@@ -1,8 +1,9 @@
 #include "Arduino.h"
+#include "Led.h"
 #include "SequenceBasicFlash.h"
 
 SequenceBasicFlash::SequenceBasicFlash(Led &led, uint8_t flash_tick_pos)
-    : _led(led)
+    : Sequence(led)
 {
     _led.flash_tick_pos = flash_tick_pos;
     _led.n_ticks_cooldown = 0;

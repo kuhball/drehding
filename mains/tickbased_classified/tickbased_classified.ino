@@ -16,6 +16,7 @@
 #include "Led.h"
 
 #include "SequenceBasicFlash.h"
+#include "SequenceTurningStaticObject.h"
 
 
 // pin setup (all digital)
@@ -35,7 +36,7 @@ Led led1(PIN_LED1, true);
 Led led2(PIN_LED2, true);
 Led led3(PIN_LED3, true);
 
-SequenceBasicFlash seq1(led1, 0);
+SequenceTurningStaticObject seq1(led1, 500, HALL_TICKS_PER_TURN);
 SequenceBasicFlash seq2(led2, 0);
 SequenceBasicFlash seq3(led3, 0);
 
