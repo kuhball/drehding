@@ -150,9 +150,35 @@ Teensy 4.0, Arduino compatible
 	- = multiple objects switching in and out, sometimes faster, sometimes slower
 - put an object on one side of the octahedrons
 	- = can we make that appear and disappear by using a single LED and switching flashpoints?
-	- maybe some more ideas with this?
+	- works well with face put one one side
+- face on one side
+	- make it move by one LED, stationary with another
+	- make object side without face stationary, then shortly blink over to face (shock), then off again
+		- maybe at random intervals, so observers have to wait
+- other objects on one or more sides
+	- can cause interleaving and spiralling effects
+- mount other objects on the motor
+	- I would fancy a spiral
+	- Try first with Küchenmaschiene
+		- Looks nice with Kuechenmachine
+		- Keep object motor running two: PWM can be used to change flashing speed until matches Kuechenmachine
+- softstart motor (start slow, then to target speed)
+- faces on two sides
+	- one smiling, one sad
+	- two leds, both faces smiling
+	- from time to time, one flips to sad state
+
+
 
 ## Idea collection
+
+- write a sequence flashing processor
+	- aka tell each LED at which tick to flash and for how long in millis
+	- allows for flexible flash configuration testing
+	- e.g.
+		- LED1_ticks = [0,8,4,7]
+		- LED1_intervals = [500, 100, 200, 500]
+	- wraps around after the end
 
 - write a function to detrmine the rounds-per-minute/second/micros
 	- count interrupts with interrupt counter
@@ -197,6 +223,12 @@ int rps():
 	should contain LED functionality, counters, steering methods, parameters, etc.
 
 - change to measure also HIGH->LOW with interrupts -> better number (18 instead of 9) for dividing
+
+## Hardware
+- Resistors: Conrad Kemo S001 Kohleschicht-Widerstand Sortiment 200St. (3€)
+- Buttons:
+	- Conrad: TE Connectivity Drucktaster (20=4€)
+	- Conrad: Joy-it sbc-buttonmatrix (5€)
 
 ## Appendix / Notes / Legacy
 
