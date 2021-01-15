@@ -20,10 +20,15 @@ class SequenceTurningStaticObject: protected Sequence {
   public:
     /**
      * @param led the pin the motor is connected to, can be digital or analogue pin; try not to use pin 5 and 6, because of interactions with the millis() and delay() functions
-     * @param flash_tick_pos_change_interval // change flash tick position this often; in milliseconds
-     * @param ticks_per_turn // how many ticks per turn the hall sensor sends per complete rotation
+     * @param flash_tick_pos_change_interval change flash tick position this often; in milliseconds
+     * @param ticks_per_turn how many ticks per turn the hall sensor sends per complete rotation
+     * @param reverse change the illusionary turning direction
      */
-    SequenceTurningStaticObject(Led &led, uint64_t flash_tick_pos_change_interval, uint8_t ticks_per_turn);
+    SequenceTurningStaticObject(
+      Led &led,
+      uint64_t flash_tick_pos_change_interval,
+      uint8_t ticks_per_turn,
+      bool reverse = false);
 
     /**
      * Call each loop.
@@ -37,6 +42,7 @@ class SequenceTurningStaticObject: protected Sequence {
 
     uint64_t flash_tick_pos_change_interval;
     uint8_t ticks_per_turn;
+    bool reverse;
 
   protected:
     uint64_t _flash_tick_pos_last_change = 0;

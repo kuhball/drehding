@@ -15,6 +15,7 @@
 #include "Hall.h"
 #include "Led.h"
 
+#include "SequenceAltFlash.h"
 #include "SequenceBasicFlash.h"
 #include "SequenceTurningStaticObject.h"
 
@@ -36,7 +37,10 @@ Led led1(PIN_LED1, true);
 Led led2(PIN_LED2, true);
 Led led3(PIN_LED3, true);
 
-SequenceTurningStaticObject seq1(led1, 500, HALL_TICKS_PER_TURN);
+SequenceAltFlash seq1(led1, 0, 9, 500);
+//SequenceTurningStaticObject seq1(led1, 500, HALL_TICKS_PER_TURN);
+//SequenceTurningStaticObject seq2(led2, 500, HALL_TICKS_PER_TURN, true);
+//SequenceBasicFlash seq1(led1, 0);
 SequenceBasicFlash seq2(led2, 0);
 SequenceBasicFlash seq3(led3, 0);
 
@@ -54,6 +58,8 @@ void isr() {
  * Setup the routine.
  */
 void setup() {
+  led2.turn_off();
+  led3.turn_off();
   motor.start();
   hall.set_interrupt_handler(isr);
   sei();  // start interrupts

@@ -2,10 +2,15 @@
 #include "Led.h"
 #include "SequenceTurningStaticObject.h"
 
-SequenceTurningStaticObject::SequenceTurningStaticObject(Led &led, uint64_t flash_tick_pos_change_interval, uint8_t ticks_per_turn)
+SequenceTurningStaticObject::SequenceTurningStaticObject(
+    Led &led,
+    uint64_t flash_tick_pos_change_interval,
+    uint8_t ticks_per_turn,
+    bool reverse)
     : Sequence(led),
       flash_tick_pos_change_interval(flash_tick_pos_change_interval),
-      ticks_per_turn(ticks_per_turn)
+      ticks_per_turn(ticks_per_turn),
+      reverse(reverse)
 {
     _led.flash_tick_pos = 0;
     _led.n_ticks_cooldown = 0;
@@ -16,8 +21,13 @@ void SequenceTurningStaticObject::loop_tick() {
     _led.turn_off_cond();
     if (millis() - _flash_tick_pos_last_change >= flash_tick_pos_change_interval) {
         _flash_tick_pos_last_change = millis();
-        _led.flash_tick_pos++;
-        if (_led.flash_tick_pos > ticks_per_turn) _led.flash_tick_pos = 0;
+        if (!reverse) {
+            _led.flash_tick_pos++;
+            if (_led.flash_tick_pos >= ticks_per_turn) _led.flash_tick_pos = 0;
+        } else {
+            if (_led.flash_tick_pos <= 0) _led.flash_tick_pos = ticks_per_turn;
+            _led.flash_tick_pos--;
+        }
     }
 }
 

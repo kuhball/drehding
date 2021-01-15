@@ -18,7 +18,7 @@ class SequenceBasicFlash: protected Sequence {
   public:
     /**
      * @param led the pin the motor is connected to, can be digital or analogue pin; try not to use pin 5 and 6, because of interactions with the millis() and delay() functions
-     * @param flash_tick_pos // at which hall tick position the LEd to flash
+     * @param flash_tick_pos at which hall tick position the LED to flash
      */
     SequenceBasicFlash(Led &led, uint8_t flash_tick_pos);
 
