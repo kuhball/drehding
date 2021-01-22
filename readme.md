@@ -224,6 +224,8 @@ int rps():
 
 - change to measure also HIGH->LOW with interrupts -> better number (18 instead of 9) for dividing
 
+- lookup stobe-gifs and get inspired
+
 ## Installation / performance ideas
 
 ### Handheld
