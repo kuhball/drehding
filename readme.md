@@ -167,6 +167,7 @@ Teensy 4.0, Arduino compatible
 	- one smiling, one sad
 	- two leds, both faces smiling
 	- from time to time, one flips to sad state
+- now that lamps are restricted in wehre they can shine: Place one to highlight the upper, another to highlight the lower part of the object. Idea by Christ (works, try some more Oskar)
 
 
 
