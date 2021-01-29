@@ -244,10 +244,6 @@ Remarks on this:
 	- then every station would have their own 1-3 handheld devices
 
 ## Hardware
-- Resistors: Conrad Kemo S001 Kohleschicht-Widerstand Sortiment 200St. (3€)
-- Buttons:
-	- Conrad: TE Connectivity Drucktaster (20=4€)
-	- Conrad: Joy-it sbc-buttonmatrix (5€)
 
 ## Appendix / Notes / Legacy
 
