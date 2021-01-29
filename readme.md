@@ -143,14 +143,17 @@ Teensy 4.0, Arduino compatible
 
 - single LED flash = stationary object
 - multiple LED flash = multiple interleaved stationary objects
+	- not very distinguishable, maybe requires different LED colours or bigger object
 - single LED flash, then slowly changing flashpoint = stationary object that slowly moves
 - two LEDs flash, then slowly changing flashpoints, both in opposite directions = two stationary objects rotating against each other
+	- looks very nice with time-based flashing
 - one LED at it's flashpoint on; after some time, switch off and second on, then off and third on, usw.
 	- first long on-times for each LED; then shorter, then longer again
 	- = multiple objects switching in and out, sometimes faster, sometimes slower
-- put an object on one side of the octahedrons
+- put an object on one side of the octahedron
 	- = can we make that appear and disappear by using a single LED and switching flashpoints?
-	- works well with face put one one side
+		- yes, looks very nice
+	- works well with face put one two side (one smiling, one frowning)
 - face on one side
 	- make it move by one LED, stationary with another
 	- make object side without face stationary, then shortly blink over to face (shock), then off again
@@ -167,13 +170,15 @@ Teensy 4.0, Arduino compatible
 	- one smiling, one sad
 	- two leds, both faces smiling
 	- from time to time, one flips to sad state
-- now that lamps are restricted in wehre they can shine: Place one to highlight the upper, another to highlight the lower part of the object. Idea by Christ (works, try some more Oskar)
+	- look nice!
+- now that lamps are restricted in where they can shine: Place one to highlight the upper, another to highlight the lower part of the object. Idea by Christ (works, try some more Oskar)
+	- looks nice with both sides moving in opposite directions
 
 
 
 ## Idea collection
 
-- write a sequence flashing processor
+- write a sequence flashing processor [done]
 	- aka tell each LED at which tick to flash and for how long in millis
 	- allows for flexible flash configuration testing
 	- e.g.
@@ -181,7 +186,7 @@ Teensy 4.0, Arduino compatible
 		- LED1_intervals = [500, 100, 200, 500]
 	- wraps around after the end
 
-- write a function to detrmine the rounds-per-minute/second/micros
+- write a function to detrmine the rounds-per-minute/second/micros [done]
 	- count interrupts with interrupt counter
 	- add computeRpm function to loop
 	- uses time to read time passed, reads interrupt counter, divides by interrupts-per-round, divides by time in seconds, rounds
@@ -197,35 +202,35 @@ int rps():
 	return rps
 ```
 
-- write function that flashes LED at flashes / round
+- write function that flashes LED at flashes / round [done]
 	- we know the rps value
 	- means LED should flash X=s/rps times per second
 	- implement with micros/millis
 	
-- add fraction delay form round start
+- add fraction delay form round start [not required, starting point is first hall signal]
 	- somehow synchronize starting point of LEDs time in previous function
 	- then flash them again X times
 	- but shift starting point by a milli/micro value
 	- should cause unsynced LEDs
 	
-- loop() called ca. at 117 kHz aka 117,000 times/second?
+- loop() called ca. at 117 kHz aka 117,000 times/second? [can ignore, time based flashing works very well, processor obviously fast enough]
 	- Could be more or less, depends on board, code in loop, etc.
 	- Not a good value to build anything on. Use rather micro or milliseconds
 	
-- write time-based version of code
+- write time-based version of code [done]
 	- measures rotations-per-micros
 	- controls LEDs with parameters:
 		- flash each fraction (<1) or multiple (>=1) of rotations
 	- provides better granularity control
-	- might de-sync after some runtime
+	- might de-sync after some runtime [does not, works perfectly]
 		- figure out a way to re-sync with hall signal from time to time
 
-- write an LED class
+- write an LED class [done]
 	should contain LED functionality, counters, steering methods, parameters, etc.
 
-- change to measure also HIGH->LOW with interrupts -> better number (18 instead of 9) for dividing
+- change to measure also HIGH->LOW with interrupts -> better number (18 instead of 9) for dividing [done]
 
-- lookup stobe-gifs and get inspired
+- lookup stobe-gifs and get inspired [done]
 
 ## Installation / performance ideas
 
