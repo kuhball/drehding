@@ -9,6 +9,8 @@
  * by a hallsensor (tacho) as the motor turns the object.
  */
 #include "Arduino.h"
+#include "Encoder.h"
+#include "Bounce.h"
 
 #include "Motor.h"
 #include "HallTimed.h"
@@ -16,11 +18,14 @@
 
 
 // pin setup (all digital)
-#define PIN_MOTOR 3  // motor speed control
+#define PIN_MOTOR 15  // motor speed control, use pin that is PWM enabled
 #define PIN_HALL 14  // do not use the pin with the board LED attached (usually 13)
 #define PIN_LED1 4
 #define PIN_LED2 5
 #define PIN_LED3 6
+#define PIN_ENCODER_CLK 10  // do not use the pin with the board LED attached (usually 13)
+#define PIN_ENCODER_DT 11  // do not use the pin with the board LED attached (usually 13)
+#define PIN_ENCODER_SW 12  // button, do not use the pin with the board LED attached (usually 13)
 
 // base configuration
 #define HALL_TICKS_PER_TURN 18  // how often the hall-sensor sends a pulse per turn; a hardware constant; see hall-sensor specification or tests/hallsensorpulses
@@ -43,10 +48,14 @@ static const uint16_t speed_degree = 1;  // how many degrees to change
 uint32_t last_change = 0;
 uint16_t current_degree = 0;
 
+// speed control variables
+uint8_t speed = 0;
+
 // variables (do not change)
 HallTimed hall(PIN_HALL, HALL_TICKS_PER_TURN);
 Motor motor(PIN_MOTOR, MOTOR_PWM_HZ);
-
+Encoder motorspeed(PIN_ENCODER_CLK, PIN_ENCODER_DT);
+Bounce button = Bounce(PIN_ENCODER_SW, 5); 
 
 /**
  * Function called on interrupt.
@@ -61,9 +70,13 @@ void isr() {
 void setup() {
   motor.start();
 
-  //leds[1].turn_off();
+  //leds[0].turn_on();
+  //leds[1].turn_on();
+  //leds[2].turn_on();
   leds[2].turn_off();
   last_change = millis();
+
+  motorspeed.write((int32_t)Motor::DUTY_CYCLE_DEFAULT);
 
   hall.set_interrupt_handler(isr);
   sei();  // start interrupts
@@ -87,4 +100,19 @@ void loop() {
   // for each LED check if action required at current position
   const uint16_t degree = hall.get_degree();
   for (size_t i = 0; i < N_LEDS; ++i) leds[i].turn_on_cond(hall.tick_no, degree);
+
+  // adapt motor speed if changed
+  const int32_t encoder_pos = motorspeed.read();
+  const uint8_t speed_new = constrain(encoder_pos, 0, 255);
+  motorspeed.write((int32_t)speed_new);
+  if (speed_new != speed) {
+    motor.set_speed(speed);
+    speed = speed_new;
+  }
+
+  // react to button press
+  /*bouncer.update ();
+  uint8_t button = bouncer.read();  // HIGH or LOW
+  if (button == HIGH) { do }
+  */
 }
