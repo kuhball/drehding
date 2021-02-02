@@ -250,6 +250,8 @@ Remarks on this:
 
 ## Hardware
 
+- Rotary encoder: https://lastminuteengineers.com/rotary-encoder-arduino-tutorial/
+
 ## Appendix / Notes / Legacy
 
 ### Interrupt pins
