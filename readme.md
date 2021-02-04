@@ -6,6 +6,8 @@ An optical illusion.
 - [sandbox/](sandbox/) - place for random sketches and tries
 - [ui/](ui/) - user interface tools to interact with the Arduino
 
+![Connection diagram](diagrams/main.svg)
+
 ## The project
 **Dreh Dings** develops around the [stroboscopic effect](https://en.wikipedia.org/wiki/Stroboscopic_effect). The idea is to place a rotating geometrical object (e.g. a cube) in the centre of a stage and light it at specific intervals with flashes from a number of surrounding LED lights. By varying the flash intervals, various optical illusion effects can be generated. See the following images for a high level schema:
 
