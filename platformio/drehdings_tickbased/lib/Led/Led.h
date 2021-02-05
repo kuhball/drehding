@@ -24,7 +24,7 @@ class Led {
 
     /**
      * Turn LED on, if conditions are met.
-     * Does nothing if condition_mode is diabled.
+     * Does nothing if condition_mode is disabled.
      * 
      * @param tick_no current tick no of the motor, aka tick counter
      * @param part current roation part, e.g. degree
@@ -33,7 +33,7 @@ class Led {
 
     /**
      * Turn LED off, if conditions are met.
-     * Does nothing if condition_mode is diabled.
+     * Does nothing if condition_mode is disabled.
      */
     void turn_off_cond();
 
