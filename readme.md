@@ -30,21 +30,10 @@ More advanced and interesting flash configurations are also possible.
 
 
 ## Set-up
-This section describes how to set up the project and get it to run the fast way.
-
-1. Navigate to [arduinoide/releases/](arduinoide/releases/) and pick one.
-2. Set-up the hardware according to the connection diagram of the release
-3. Download the files in the releases `src/` folder
-4. Open the `Drehdings.ino` with the Arduino IDE
-5. Change the settings in the configuration section to match your set-up
-6. Compile and upload to the microcontroller
-7. Enjoy!
-
-
+Navigate to [arduinoide/releases/](arduinoide/releases/) and follow the instructions.
 
 ## The software
 Coding is done with the [platform.io](https://platformio.org/) framework. Ideally integrated into VSCode as IDE. For every release, an Arduino IDE compatible source code folder is also created.
-
 
 ## The hardware
 See [hardware.md](hardware.md).
