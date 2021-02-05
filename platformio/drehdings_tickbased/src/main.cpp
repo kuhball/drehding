@@ -10,7 +10,7 @@
  */
 #include "Arduino.h"
 #include "Encoder.h"
-#include "Bounce.h"
+#include "Bounce2.h"
 
 #include "Motor.h"
 #include "HallTimed.h"
@@ -55,7 +55,7 @@ uint8_t speed = 0;
 HallTimed hall(PIN_HALL, HALL_TICKS_PER_TURN);
 Motor motor(PIN_MOTOR, MOTOR_PWM_HZ);
 Encoder motorspeed(PIN_ENCODER_CLK, PIN_ENCODER_DT);
-Bounce button = Bounce(PIN_ENCODER_SW, 5); 
+Bounce button = Bounce(PIN_ENCODER_SW, 50); 
 
 /**
  * Function called on interrupt.
@@ -77,6 +77,8 @@ void setup() {
   last_change = millis();
 
   motorspeed.write((int32_t)Motor::DUTY_CYCLE_DEFAULT);
+
+  Serial.begin(9600);
 
   hall.set_interrupt_handler(isr);
   sei();  // start interrupts
@@ -111,8 +113,10 @@ void loop() {
   }
 
   // react to button press
-  /*bouncer.update ();
-  uint8_t button = bouncer.read();  // HIGH or LOW
-  if (button == HIGH) { do }
-  */
+  if (button.update()) {
+    if (button.fallingEdge()) {
+      Serial.println("Button pressed");
+    }
+  }
+  
 }
