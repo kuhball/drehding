@@ -35,7 +35,8 @@
 
 // base configuration
 #define HALL_TICKS_PER_TURN 18  // how often the hall-sensor sends a pulse per turn; a hardware constant; see hall-sensor specification or tests/hallsensorpulses
-#define MOTOR_PWM_HZ 100       // frequency of the PWM signal driving the motor; a hardware constant; see motor specification
+#define MOTOR_PWM_HZ 100  // frequency of the PWM signal driving the motor; a hardware constant; see motor specification
+#define GEAR_RATIO 1.0  // if gearing employed, set this to the ratio; >1.0 means object turns faster than motor, <1.0 means object turns slower than motor
 
 // effect configurations
 // LED1 (CW) and LED2 (CCW) rotation configuration
@@ -84,6 +85,7 @@ void setup() {
 
   // LED sequence control
   leds[2].flash_at_part = 0;
+  //leds[2].turn_off();
   last_change = millis();
 
   hall.set_interrupt_handler(isr);
@@ -106,7 +108,8 @@ void loop() {
   }
 
   // for each LED check if action required at current position
-  const uint16_t degree = hall.get_degree();
+  uint16_t degree = (uint16_t)((float)hall.get_degree() * GEAR_RATIO);  // motor degree to object degree
+  while (degree > 360) degree = degree - 360;  // wrap around to ensure valid angle
   for (size_t i = 0; i < sizeof(leds); ++i) leds[i].turn_on_cond(hall.tick_no, degree);
 
   // adapt motor speed if changed
@@ -121,10 +124,13 @@ void loop() {
   // react to button press (LED3 effect)
   if (button.update()) {
     if (button.fallingEdge()) {
+      //Serial.print("Button pressed: ");
       if (leds[2].flash_at_part == 0) {
         leds[2].flash_at_part = 45;
+        //Serial.println("45");
       } else {
         leds[2].flash_at_part = 0;
+        //Serial.println("0");
       }
     }
   }
