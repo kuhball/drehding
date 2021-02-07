@@ -1,5 +1,5 @@
 /**
- * DrehDings project: tick-based version.
+ * DrehDings project.
  * 
  * A turning geometrical object is highlighted by LED flashes at
  * regular intervals, producing an optical illusion of stationary
