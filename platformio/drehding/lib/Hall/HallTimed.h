@@ -28,8 +28,11 @@ class HallTimed: public Hall {
 
     void handle_interrupt(void);
 
-    // current turn degree position, estimated
+    // current rotation angle position in degree, estimated
     uint16_t get_degree();
+
+    // current rotation fraction position, 0<=f<1, estimated
+    float get_fraction();
 
     // rotation speed in micros
     volatile uint32_t speed = 0;

@@ -16,5 +16,9 @@ void HallTimed::handle_interrupt(void) {
 }
 
 uint16_t HallTimed::get_degree() {
-    return (uint16_t)(360 * ((float)(micros() - turn_start) / (float)speed));
+    return (uint16_t)(360 * get_fraction());
+}
+
+float HallTimed::get_fraction() {
+    return (float)(micros() - turn_start) / (float)speed;
 }
