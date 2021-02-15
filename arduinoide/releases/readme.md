@@ -14,7 +14,24 @@ This section describes how to set up the project and get it to run the fast way.
 
 ## Releases
 
-### [2020-03-05 Absolute Zero](20200205AbsoluteZero/)
+### [2021-03-15 Glossy Grape](20210215GlossyGrape/)
+A set-up with three LEDs, a rotary encoder to control the motor speed, and a push button to loop through the effects. Does not support gear ratio. Only includes a small number of effects. Mainly intended to try the configuration.
+
+**Usage:**
+- Turn knob of rotary encoder to start the motor and to control the motor speed.
+- Use push button on rotary encoder to iterate through the LEDs' effects.
+
+**Changelog:**
+- switched from Encoder.h to SimpleEncoder.h library
+- added Effect-class based LED effects
+- fixed glitches that sometimes lead to memory leaks
+- added all dependencies directly to the code to avoid Arduino IDE library version issues
+
+**Diagram:**
+Same as for release `20210205AbsoluteZero` below.
+
+
+### [2021-03-05 Absolute Zero](20210205AbsoluteZero/)
 A set-up with three LEDs, a rotary encoder to control the motor speed, and a push button to loop through the effects. Does not support gear ratio. Only includes a small number of effects. Mainly intended to try the configuration.
 
 **Usage:**
@@ -23,7 +40,7 @@ A set-up with three LEDs, a rotary encoder to control the motor speed, and a pus
 - Use push button on rotary encoder to alternate the third LEDs point of flicker (from 0 to 45 degree and back)
 
 **Diagram:**
-![Connection diagram](20200205AbsoluteZero/diagram.png)
+![Connection diagram](20210205AbsoluteZero/diagram.png)
 
 
 
