@@ -22,6 +22,10 @@ void Hall::handle_interrupt(void) {
 }
 
 uint8_t Hall::get_tick_pos() {
+    cli();
     ticked_since_last_read = false;
-    return tick_pos;
+    const uint8_t tick_pos_copy = tick_pos;
+    sei();
+    
+    return tick_pos_copy;
 }

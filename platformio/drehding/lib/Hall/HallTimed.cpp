@@ -20,5 +20,10 @@ uint16_t HallTimed::get_degree() {
 }
 
 float HallTimed::get_fraction() {
-    return (float)(micros() - turn_start) / (float)speed;
+
+    cli();
+    const float fraction = (float)(micros() - turn_start) / (float)speed;
+    sei();
+
+    return fraction;
 }
