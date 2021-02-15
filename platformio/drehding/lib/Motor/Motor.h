@@ -33,6 +33,18 @@ class Motor {
      * @param speed betwee 0 (off) and 255 (full speed); aka 0-100% of duty cycle on
      */
     void set_speed(uint8_t speed);
+    /**
+     * Increase motor speed.
+     * 
+     * @param val value by which to increase
+     */
+    void inc_speed(uint8_t val = 1);
+    /**
+     * Decrease motor speed.
+     * 
+     * @param val value by which to decrease
+     */
+    void dec_speed(uint8_t val = 1);
 
     uint64_t frequency;
 
