@@ -18,7 +18,7 @@ class Led {
   public:
     /**
      * @param pin the pin the LED is connected to, must be digital pin
-     * @param inverse usually, a HIGH switches the LED on; set this to inverse
+     * @param inverse usually, a HIGH switches the LED on; set this to inverse if a LOW switches on
      */
     Led(uint8_t pin, bool inverse = false);
 
