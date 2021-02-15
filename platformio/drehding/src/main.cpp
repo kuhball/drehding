@@ -10,12 +10,13 @@
  * hallsensor (tacho) as the motor turns the object.
  */
 #include "Arduino.h"
-#include "Encoder.h"
-#include "Bounce.h"
+#include "SimpleRotary.h"
 
 #include "Motor.h"
 #include "HallTimed.h"
 #include "Led.h"
+//#include "EffectRotation.h"
+//#include "EffectSequence.h"
 
 
 /*** START: CONFIGURATION **/
@@ -26,9 +27,9 @@
 // @see https://www.pjrc.com/store/teensy40.html for PIN diagram
 #define PIN_MOTOR 15  // motor speed control, use pin that is PWM enabled
 #define PIN_HALL 14  // motor's hallsensor's signal, usually termed FG
-#define PIN_LED1 4
-#define PIN_LED2 5
-#define PIN_LED3 6
+#define PIN_LED1 1
+#define PIN_LED2 2
+#define PIN_LED3 3
 #define PIN_ENCODER_CLK 10  // rotary encoder's CLK signal, also called A signal
 #define PIN_ENCODER_DT 11  // rotary encoder's DT signal, also called B signal
 #define PIN_ENCODER_SW 12  // either signal of rotary encoder's integrated push-button or any other push-button
@@ -45,27 +46,26 @@ static const uint16_t speed_degree = 1;  // how many degrees to change
 
 /*** END: CONFIGURATION **/
 
+// init led objects
+Led led1(PIN_LED1, true);
+Led led2(PIN_LED2, true);
+Led led3(PIN_LED3, true);
 
-// LED objects init
-Led leds[3] = {
-  Led(PIN_LED1, true),
-  Led(PIN_LED2, true),
-  Led(PIN_LED3, true)
-};
-
-// controll objects init
+// init controll objects
 HallTimed hall(PIN_HALL, HALL_TICKS_PER_TURN);
 Motor motor(PIN_MOTOR, MOTOR_PWM_HZ);
-Encoder motorspeed(PIN_ENCODER_CLK, PIN_ENCODER_DT);
-Bounce button = Bounce(PIN_ENCODER_SW, 50); 
+SimpleRotary rotary(PIN_ENCODER_CLK, PIN_ENCODER_DT, PIN_ENCODER_SW);
+
+//EffectRotation ef1(leds[0], 25);
+//uint16_t a[] = {0, 45};
+//uint32_t b[] = {100, 100};
+//EffectSequence ef1(leds[0], (uint16_t []) {0, 45}, (uint32_t []) {100, 100}, 2);
+//EffectRotation ef2(leds[0], 25);
 
 // rotation variables
-uint32_t last_change = 0;
-uint16_t current_degree = 0;
-
-// speed control variables
-uint8_t speed = 0;
-
+//uint32_t last_change = 0;
+//uint16_t current_degree = 0;
+//elapsedMillis ellapsed;u
 
 /**
  * Function called on interrupt.
@@ -78,15 +78,15 @@ void isr() {
  * Setup the routine.
  */
 void setup() {
-  // init motor speed controll
-  motorspeed.write((int32_t)Motor::DUTY_CYCLE_DEFAULT);
-
-  Serial.begin(9600);
+  // start motor initially
+  motor.start();
 
   // LED sequence control
-  leds[2].flash_at_part = 0;
-  //leds[2].turn_off();
-  last_change = millis();
+  led1.flash_at_part = 0;
+  led2.flash_at_part = 45;
+  led3.flash_at_part = 60;
+
+  //last_change = millis();
 
   hall.set_interrupt_handler(isr);
   sei();  // start interrupts
@@ -96,43 +96,37 @@ void setup() {
  * Loop execute indefinitiely.
  */
 void loop() {
-  for (size_t i = 0; i < sizeof(leds); ++i) leds[i].turn_off_cond();
+  // led turn off
+  led1.turn_off_cond();
+  led2.turn_off_cond();
+  led3.turn_off_cond();
 
-  // object rotation effect steering
-  if (millis() - last_change >= change_millis) {
+  /*
+  if (millis() - last_change > 200) {
+    if(leds[0].flash_at_part == 0) {
+      leds[0].flash_at_part = 45;
+    } else {
+      leds[0].flash_at_part = 0;
+    }
     last_change = millis();
-    leds[0].flash_at_part = current_degree;
-    leds[1].flash_at_part = 360 - current_degree;
-    current_degree += speed_degree;
-    if (current_degree >= 360) current_degree = 0;
   }
+  */
+  
+  // adapt motor speed if changed
+  const byte direction = rotary.rotate();
+  if ( direction == 1  ) motor.inc_speed();
+  else if ( direction == 2 ) motor.dec_speed();
 
   // for each LED check if action required at current position
-  uint16_t degree = (uint16_t)((float)hall.get_degree() * GEAR_RATIO);  // motor degree to object degree
-  while (degree > 360) degree = degree - 360;  // wrap around to ensure valid angle
-  for (size_t i = 0; i < sizeof(leds); ++i) leds[i].turn_on_cond(hall.tick_no, degree);
-
-  // adapt motor speed if changed
-  const int32_t encoder_pos = motorspeed.read();
-  const uint8_t speed_new = constrain(encoder_pos, 0, 255);
-  motorspeed.write((int32_t)speed_new);
-  if (speed_new != speed) {
-    motor.set_speed(speed);
-    speed = speed_new;
-  }
-
-  // react to button press (LED3 effect)
-  if (button.update()) {
-    if (button.fallingEdge()) {
-      //Serial.print("Button pressed: ");
-      if (leds[2].flash_at_part == 0) {
-        leds[2].flash_at_part = 45;
-        //Serial.println("45");
-      } else {
-        leds[2].flash_at_part = 0;
-        //Serial.println("0");
-      }
-    }
-  }
+  const uint16_t degree = (uint16_t)((float)hall.get_degree() * GEAR_RATIO) % 360;  // motor degree to object degree, wrap around to ensure valid angle
+  cli();
+  const uint16_t tick_no = hall.tick_no;
+  sei();
+  led1.turn_on_cond(tick_no, degree);
+  led2.turn_on_cond(tick_no, degree);
+  led3.turn_on_cond(tick_no, degree);
+  
+  //ef2.update();
+  //ef1.update();
   
 }
