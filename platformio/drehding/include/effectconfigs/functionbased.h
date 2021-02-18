@@ -2,7 +2,7 @@
 /*
  * effectcfg_*.h - Configuration of the LEDs and their effects.
  * 
- * Playground configuration for testing and development.
+ * Example file to show off the function based effects.
 */
 #ifndef EffectCfg_h
 #define EffectCfg_h

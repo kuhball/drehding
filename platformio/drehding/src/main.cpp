@@ -13,7 +13,7 @@
 
 /*** START: CONFIGURATION **/
 #include "config.h"
-#include "effectconfigs/example.h"  // choose the effect config you would like to include
+#include "effectconfigs/playground.h"  // choose the effect config you would like to include
 /*** END: CONFIGURATION **/
 
 #include "SimpleRotary.h"
