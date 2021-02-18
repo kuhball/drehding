@@ -28,10 +28,33 @@ class HallTimed: public Hall {
 
     void handle_interrupt(void);
 
-    // current rotation angle position in degree, estimated
+    /**
+     * Current rotation angle position in degree.
+     * 
+     * The estimated position in degree of the rotating objects current turn.
+     * 
+     * @return rotation angle degree, 0<=degree<360
+     */
     uint16_t get_degree();
 
-    // current rotation fraction position, 0<=f<1, estimated
+    /**
+     * Current rotation angle position in given resolution.
+     * 
+     * The estimated position of the rotating objects current turn in given resolution.
+     * 
+     * @param resolution desired rotation angle resolution, e.g. 360 for degree
+     * @return rotation angle position, 0<=position<resolution
+     */
+    uint16_t get_angle(uint16_t resolution);
+
+    /**
+     * Current rotation angle position as fraction of the complete turn.
+     * 
+     * Can return values greater or equal to one in some cases where the update is delayed.
+     * Use get_angle() or get_degree() for a safe version.
+     * 
+     * @return rotation angle fraction, usually 0<=fraction<1
+     */
     float get_fraction();
 
     // rotation speed in micros

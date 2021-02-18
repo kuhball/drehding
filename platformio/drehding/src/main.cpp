@@ -38,8 +38,10 @@
 
 // base configuration
 #define HALL_TICKS_PER_TURN 18  // how often the hall-sensor sends a pulse per turn; a hardware constant; see hall-sensor specification or tests/hallsensorpulses
+#define HALL_ROT_ANGLE_RES 360 // resolution of the rotation angle (e.g. 360 for degree); higher value lead to more smooth transition; too high value can lead to flashes being missed; must be valid unit16_t number
 #define MOTOR_PWM_HZ 200  // frequency of the PWM signal driving the motor; a hardware constant; see motor specification
 #define GEAR_RATIO 1.0  // if gearing employed, set this to the ratio; >1.0 means object turns faster than motor, <1.0 means object turns slower than motor
+
 
 // effect configuration
 #define N_EFFECTS 17  // number of effects for each LED; all LEDs must ahve the same number of effects
@@ -50,6 +52,7 @@ Led led2(PIN_LED2, true);
 Led led3(PIN_LED3, true);
 
 // effect definitions (LED1-LED3)
+// NOTE: the valid values for the flash positions depend on HALL_ROT_ANGLE_RES aka 0<=position<HALL_ROT_ANGLE_RES
 EffectStationary led1_effect1 = EffectStationary(led1, 0);
 EffectStationary led1_effect2 = led1_effect1;
 EffectStationary led1_effect3 = led1_effect1;
@@ -57,7 +60,7 @@ EffectStationary led1_effect4 = led1_effect1;
 EffectSequence led1_effect5 = EffectSequence(led1, (uint16_t []) {0, 180}, (uint32_t []) {1000, 1000}, 2);
 EffectSequence led1_effect6 = EffectSequence(led1, (uint16_t []) {0, 90}, (uint32_t []) {1000, 1000}, 2);
 EffectSequence led1_effect7 = EffectSequence(led1, (uint16_t []) {0, 45}, (uint32_t []) {1000, 1000}, 2);
-EffectRotation led1_effect8 = EffectRotation(led1, 100);
+EffectRotation led1_effect8 = EffectRotation(led1, 100, HALL_ROT_ANGLE_RES);
 EffectRotation led1_effect9 = led1_effect8;
 EffectRotation led1_effect10 = led1_effect8;
 EffectRotation led1_effect11 = led1_effect8;
@@ -78,7 +81,7 @@ EffectOff led2_effect7 = led2_effect4;
 EffectOff led2_effect8 = led2_effect4;
 EffectStationary led2_effect9 = led2_effect1;
 EffectSequence led2_effect10 = EffectSequence(led2, (uint16_t []) {0, 180}, (uint32_t []) {1000, 1000}, 2);
-EffectRotation led2_effect11 = EffectRotation(led2, 100, true);
+EffectRotation led2_effect11 = EffectRotation(led2, 100, HALL_ROT_ANGLE_RES, true);
 EffectRotation led2_effect12 = led2_effect11;
 EffectRotation led2_effect13 = led2_effect11;
 EffectRotation led2_effect14 = led2_effect11;
@@ -229,11 +232,11 @@ void loop() {
   led3_effects[effect_id]->update();
 
   // for each LED check if action required at current position
-  const uint16_t degree = (uint16_t)((float)hall.get_degree() * GEAR_RATIO) % 360;  // motor degree to object degree, wrap around to ensure valid angle
+  const uint16_t position = (uint16_t)((float)hall.get_angle(HALL_ROT_ANGLE_RES) * GEAR_RATIO) % HALL_ROT_ANGLE_RES;  // motor rotation angle position, wrap around to ensure valid value
   cli();
   const uint16_t tick_no = hall.tick_no;
   sei();
-  led1.turn_on_cond(tick_no, degree);
-  led2.turn_on_cond(tick_no, degree);
-  led3.turn_on_cond(tick_no, degree);
+  led1.turn_on_cond(tick_no, position);
+  led2.turn_on_cond(tick_no, position);
+  led3.turn_on_cond(tick_no, position);
 }

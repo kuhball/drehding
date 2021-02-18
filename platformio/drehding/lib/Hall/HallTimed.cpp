@@ -16,7 +16,11 @@ void HallTimed::handle_interrupt(void) {
 }
 
 uint16_t HallTimed::get_degree() {
-    return (uint16_t)(360 * get_fraction());
+    return get_angle(360);
+}
+
+uint16_t HallTimed::get_angle(uint16_t resolution) {
+    return (uint16_t)(resolution * get_fraction()) % resolution;
 }
 
 float HallTimed::get_fraction() {

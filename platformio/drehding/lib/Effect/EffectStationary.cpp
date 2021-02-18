@@ -8,7 +8,7 @@ EffectStationary::EffectStationary(Led &led, uint16_t position)
 {};
 
 void EffectStationary::init() {
-    led.flash_at_part = position;
+    led.flash_at_pos = position;
     led.n_ticks_cooldown = 0;
     led.condition_mode = true;
 }

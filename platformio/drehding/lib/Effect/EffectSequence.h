@@ -22,7 +22,7 @@ class EffectSequence: public Effect {
   public:
     /**
      * @param led the pin the motor is connected to, can be digital or analogue pin; try not to use pin 5 and 6, because of interactions with the millis() and delay() functions
-     * @param positions rotation angle in degree at which to flash; must all be 0<=angle<360
+     * @param positions rotation angle position at which to flash; ; valid values depend on rotation angle resolution, e.g for degrees 0<=position<360
      * @param intervals time in milliseconds to stay with the associated rotation angle; must be of same length as positions
      * @param size the size of the positions and intervals arrays
      */

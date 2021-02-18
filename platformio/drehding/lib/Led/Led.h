@@ -27,9 +27,9 @@ class Led {
      * Does nothing if condition_mode is disabled.
      * 
      * @param tick_no current tick no of the motor, aka tick counter
-     * @param part current roation part, e.g. degree
+     * @param pos current roation angle position, e.g. degree; valid values depend on rotation angle resolution
      */
-    void turn_on_cond(uint16_t tick_no, uint16_t part);
+    void turn_on_cond(uint16_t tick_no, uint16_t pos);
 
     /**
      * Turn LED off, if conditions are met.
@@ -49,11 +49,12 @@ class Led {
      */
     void turn_off();
 
-    // at which turn part of the motor the LED should flash
-    uint16_t flash_at_part = 0;
+    // at which rotation angle position of the motor the LED should flash, valid values depend on rotation angle resolution (e.g. 0<=x<360 for degrees)
+    uint16_t flash_at_pos = 0;
     // number of rotations cooldown (waiting) after each flash before flashing again
     uint8_t n_ticks_cooldown = 0;
     // time (in micros) the LED should stay on; choose lowest value that still produces sufficient illumination; see tests/determineledminblinktime
+    // lower values will make the image sharper
     uint64_t on_interval = 300;
     // set condition LED turn on/off
     bool condition_mode = true;

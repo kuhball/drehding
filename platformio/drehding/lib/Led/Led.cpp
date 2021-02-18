@@ -14,11 +14,11 @@ Led::Led(uint8_t pin, bool inverse)
     }
 }
 
-void Led::turn_on_cond(uint16_t tick_no, uint16_t part) {
+void Led::turn_on_cond(uint16_t tick_no, uint16_t pos) {
     if (!condition_mode) return;
 
     // if not acted yet this turn and part of turn is reached
-    if ((tick_no != tick_no_last_acted) && (part == flash_at_part)) {
+    if ((tick_no != tick_no_last_acted) && (pos == flash_at_pos)) {
         tick_no_last_acted = tick_no;
         turn_on_if_cooldown();
     }
