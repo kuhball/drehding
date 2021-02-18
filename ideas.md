@@ -1,6 +1,19 @@
 # Ideas
 Random ideas and notes and such. Can be deleted at any time.
 
+- make code in libs/ into proper libs with versioning
+
+- rewrite timers to use Teensy specific timer settings (not micors, rather https://www.pjrc.com/teensy/td\_timing.html, e.g. ellapseMicros)
+
+- check all interrupt routines is follow the programming guides: https://www.pjrc.com/teensy/interrupts.html
+
+- find a better way to inject LED effects (should be add effect and that's it)
+
+- find a better way to determine number of LED's (not in code, should iterate over array somehow; but caused memory glitches in first attempt)
+
+- when +/- stable function, rewrite code to speed up (if required)
+
+
 - write a sequence flashing processor [done]
 	- aka tell each LED at which tick to flash and for how long in millis
 	- allows for flexible flash configuration testing
